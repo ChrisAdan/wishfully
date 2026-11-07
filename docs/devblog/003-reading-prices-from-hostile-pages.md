@@ -21,7 +21,7 @@ If none of these yields a plausible price, the field stays empty. Chris can add 
 | Risk | Defence |
 |---|---|
 | Huge pages | Only the first 2 million characters are read; JSON blocks over 500 KB are skipped |
-| Malformed HTML (unclosed quotes, stray `<`, unterminated scripts) | A hand-written scanner where every loop advances the cursor, so it always terminates. Tests feed it nine kinds of garbage |
+| Malformed HTML (unclosed quotes, stray `<`, unterminated scripts) | A hand-written scanner where every loop advances the cursor, so it always terminates. Tests feed it eleven kinds of garbage |
 | Deeply nested JSON built to exhaust the stack | Recursion stops at depth 12, with a test that proves it |
 | Scripts | Script text is only ever parsed as data. Nothing on the page is executed, rendered or followed |
 | Junk values ("Free", "Call for price", negative numbers, ranges like "10-20", $9,999,999) | Rejected. Accepted prices must fall between $0.01 and $1,000,000 |
@@ -31,7 +31,7 @@ Why a hand-written scanner rather than a library? The project rule is no third-p
 
 ## Slice size and shape
 
-About 560 lines: three source files (the scanner, number parsing, and the extractor) and three matching test files with 40 test cases. That's at the top of the target range, but it's one concept, and the scanner wouldn't make sense to review without the thing that uses it.
+About 560 lines: three source files (the scanner, number parsing, and the extractor) and three matching test files: 18 new tests that expand to 51 cases with parameterized inputs. That's at the top of the target range, but it's one concept, and the scanner wouldn't make sense to review without the thing that uses it.
 
 ## Caught before CI
 
@@ -44,3 +44,7 @@ Reviewing its own code before pushing, the agent found and fixed three bugs no l
 ## Next
 
 Slice 4 depends on what my wife's real note looks like. The importer that turns her iCloud note into a Wishfully list gets built around its actual format. Until I paste a sample, the agent moves on to whatever isn't blocked.
+
+## Result
+
+First compile in CI: green. 31 tests across 5 suites now pass on Linux in about a second.
