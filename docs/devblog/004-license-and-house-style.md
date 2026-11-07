@@ -4,13 +4,13 @@
 
 ## License
 
-Wishfully is MIT licensed. The code is open for anyone to use, and the project's value rests on the Wishfully name, the design and the people who use it. The decision record (0006) awaits the maintainer's write-up.
+Wishfully is MIT licensed. The code is open for anyone to use, and the project's value rests on the Wishfully name, the design and the people who use it. Decision record 0006 logs the choice.
 
 ## House style
 
 Documentation follows the writing rules in `AGENTS.md`. The core rules:
 
-- **Third person, on behalf of the maintainer.** Documents speak for the project; decision records carry the maintainer's voice.
+- **Third person, on behalf of the maintainer.** Documents speak for the project; decision records quote the maintainer verbatim.
 - **Positive framing.** Documents state what things do and guarantee.
 - **Current state.** Documents describe the project as it stands; git holds the history.
 - **Design principles.** Working methods are presented plainly as principles.
@@ -18,7 +18,7 @@ Documentation follows the writing rules in `AGENTS.md`. The core rules:
 
 ## Style as a CI check
 
-Style rules that a machine can check run in CI, beside formatting and lint. `docs-style.py` scans every Markdown file, skipping code blocks and inline code, for em dashes, the `X's own Y` construction, change-tracking words and first-person pronouns (decision records excepted). Editorial rules such as positive framing are applied in review.
+Style rules that a machine can check run in CI, beside formatting and lint. `docs-style.py` scans every Markdown file, skipping code blocks and inline code, for the CI rows of the pattern table in `AGENTS.md`. Editorial rules such as positive framing are applied in review.
 
 Every document in the repository follows the guide, and the check runs green.
 

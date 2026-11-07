@@ -14,12 +14,13 @@ RULES = [
     ("'X's own Y' (row 2)", re.compile(r"\b\w+['’]s own\b", re.IGNORECASE)),
     ("change tracking (row 3)", re.compile(r"\b(formerly|previously|no longer|used to)\b", re.IGNORECASE)),
     ("'gate' (row 25)", re.compile(r"\bgat(e|es|ed|ing)\b", re.IGNORECASE)),
+    ("redundant inversion (row 26)", re.compile(r"(?:^|[.!?]\s+)Never\b")),
+    ("trailing negation list (row 27)", re.compile(r"\bno \w+(?: \w+)?, no \w+", re.IGNORECASE)),
 ]
 FIRST_PERSON = (
     "first person (row 4)",
     re.compile(r"\bI(?:'m|'ve|'d|'ll)?\b|(?i:\b(?:me|my|mine|we|we're|we've|our|ours|us)\b)"),
 )
-FIRST_PERSON_EXEMPT = ("docs/decisions/",)
 INLINE_CODE = re.compile(r"`[^`]*`")
 
 
@@ -31,9 +32,7 @@ def markdown_files(root):
 
 
 def check(name, path):
-    rules = list(RULES)
-    if not name.startswith(FIRST_PERSON_EXEMPT):
-        rules.append(FIRST_PERSON)
+    rules = [*RULES, FIRST_PERSON]
     problems = []
     in_fence = False
     for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):

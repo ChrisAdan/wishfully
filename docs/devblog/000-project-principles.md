@@ -39,9 +39,9 @@ A **safety-net milestone** anchors the plan: by November 21 the app runs on the 
 
 - **README:** what Wishfully is and its design principles.
 - **SECURITY.md:** the security model and private vulnerability reporting.
-- **CONTRIBUTING.md:** the AI-assisted development policy. The maintainer authors and answers for every commit, and the agent's contribution is disclosed with an `Assisted-by:` trailer, the convention adopted by the Linux kernel.
+- **CONTRIBUTING.md:** the AI-assisted development policy. The agent writes each change; the maintainer directs, reviews and answers for it. Commits carry the maintainer's git identity and disclose the agent's role with an `Assisted-by:` trailer, the convention adopted by the Linux kernel.
 - **CODEOWNERS:** the maintainer owns every path, with CI configuration called out explicitly.
-- **Decision records:** a template, plus the list of decisions awaiting the maintainer's write-up.
+- **Decision records:** a template and an index.
 - **.gitignore:** generated Xcode projects, build output and every kind of signing key stay out of version control.
 
 ## Review model

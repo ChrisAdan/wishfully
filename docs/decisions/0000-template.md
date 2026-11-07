@@ -1,25 +1,20 @@
 # NNNN. Title of the decision
 
 - **Date:** YYYY-MM-DD
-- **Status:** Proposed | Accepted | Superseded by NNNN
+- **Status:** Accepted | Superseded by NNNN
+
+## Maintainer input
+
+> **Maintainer:** The verbatim excerpt of the prompt that produced this decision.
 
 ## Context
 
-What problem or constraint forced a choice? What matters most here?
-
-## Options considered
-
-1. **Option A.** One or two lines on what it is, plus its main upside and downside.
-2. **Option B.** …
+The problem or constraint behind the choice, and the options considered.
 
 ## Decision
 
-What we chose, in one sentence.
-
-## Why
-
-The reasoning, in your own words.
+The choice, in one or two sentences.
 
 ## Consequences
 
-What gets easier, what gets harder, and what would make us revisit this.
+What follows from the decision, and what would reopen it.
