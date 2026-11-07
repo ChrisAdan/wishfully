@@ -24,7 +24,7 @@ Native Swift 6 and SwiftUI, iOS 18 and later. Domain logic lives in `WishfullyCo
 ## Repository layout
 
 ```
-Packages/WishfullyCore/  Domain models and price extraction (pure Swift)
+Packages/WishfullyCore/  Domain models, price extraction, note import (pure Swift)
 docs/decisions/          Decision records
 docs/devblog/            Build log, one post per slice
 docs/STYLE.md            Writing style for all documentation
