@@ -12,3 +12,4 @@ The build log for Wishfully, one post per slice of work. Posts are drafted by Cl
 | 005 | [Importing the real list](005-importing-the-real-list.md) | Note importer |
 | 006 | [AGENTS.md and hard rules](006-agents-md-and-hard-rules.md) | Agent rules, pattern table, forbidden APIs |
 | 007 | [Product links in the import](007-product-links-in-the-import.md) | Links in the note importer |
+| 008 | [Tests, dependencies and token estimates](008-tests-dependencies-and-token-estimates.md) | Test policy, coverage, recursive dependency reviews |
