@@ -18,7 +18,13 @@ Instructions for AI coding agents and human contributors working on Wishfully. T
   | Shell | `eval`, piping downloads into a shell |
 
 - **App contents (hard).** The shipped app contains Apple frameworks and code from this repository exclusively.
-- **Dependencies (hard).** A new dependency, including a test-only one, requires an adversarial source review in `docs/security/reviews/`, the maintainer's approval, an exact version pin and a committed `Package.resolved`.
+- **Dependencies (hard).** The alternative to an external package is building and maintaining the capability in this repository. A new dependency, including a test-only one, follows this sequence, recorded in `docs/security/reviews/` from `TEMPLATE.md`:
+  1. **Build-versus-adopt estimate**, in tokens and cost (section 7): the review, the recursive trace and every future update review, against writing and maintaining the code here.
+  2. **Recursive trace** of the full dependency graph, including platform-conditional dependencies and manifests (`Package.swift` files run as code during resolution). Trace depth follows a recorded cost-benefit judgment.
+  3. **Security scan** of every package in the graph for the section 2 risk categories, at a depth scaled to its reach into this project's build.
+  4. **Propagation:** a finding anywhere in the graph appears in the final verdict.
+  5. **Closed source aborts the evaluation.** Every package in the graph is open to independent scrutiny, or the dependency is declined.
+  6. Approval by the maintainer, an exact version pin and a committed `Package.resolved`.
 - **Secrets (hard).** Secrets live in GitHub Secrets and the protected release environment. Signing material stays out of the repository (`.gitignore` covers it; gitleaks scans every commit).
 - **Personal data (hard).** Real wishlist content stays out of the repository. Tests use invented data with the same structure.
 - **Web content in the app.** Pages shared to the app are parsed as plain data: capped size, timeouts, HTTPS, and extraction of text values exclusively. Page scripts remain inert.
@@ -30,6 +36,22 @@ Instructions for AI coding agents and human contributors working on Wishfully. T
 - DRY: jscpd keeps duplication under 1%. Shared logic lives in `WishfullyCore`.
 - Logic lives in `WishfullyCore`, with tests that run on Linux.
 - CI tools are pinned and checksum-verified; actions are pinned to commit SHAs; container images are pinned by digest.
+
+### Tests: measure twice, cut once
+
+Each test protects one behavior (a contract). The suite grows with behaviors; inputs grow inside existing tests.
+
+| Situation | Action |
+|---|---|
+| A new input for a behavior an existing test covers | Add a case to that test's `arguments` |
+| A regression fix | Add the failing input to the matching parameterized test; a new test only when the assertion differs in kind |
+| A new public behavior or contract | A new test, named for the behavior |
+| Two tests that always fail together | Merge them into one parameterized test |
+| Setup repeated across tests | Move it into `Fixtures` |
+
+The deciding question: **which existing test fails if this behavior breaks?** If one exists, extend it. If none exists, write one.
+
+CI reports the test count and line coverage for `WishfullyCore` on every run. A consolidation keeps coverage equal or higher, verified by comparing the coverage reports before and after.
 
 ## 4. Work in slices
 
@@ -95,3 +117,8 @@ Default language patterns produced by AI models, and their rewrites. The `Docs s
 | 22 | Emotional framing | `The scary part`, `the best part` | State the fact | Review |
 | 23 | Self-reference to honesty | `To be honest`, `the honest answer` | Delete | Review |
 | 24 | Vague quantifiers | `many`, `a lot`, `significant` | A number with a unit | Review |
+| 25 | `gate` as a verb or noun | `checks gate every merge`, `release gate` | `every merge passes the checks` · `enables` · `unblocks` · `requires` · `release approval` | **CI** |
+
+## 7. Estimates
+
+Work is estimated in tokens, the unit an agent consumes: requests, input (fresh, cache write, cache read) and output. Each estimate converts to cost at the current list prices of at least one Anthropic model and one open-weight model, with the price date stated. Calendar time stays out of estimates. Measured usage from completed work calibrates future estimates, and estimates are labeled as inferences with a confidence value.

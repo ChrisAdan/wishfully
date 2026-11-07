@@ -9,8 +9,9 @@
 | Package | `pointfreeco/swift-snapshot-testing`, MIT license |
 | Version reviewed | 1.19.7, commit `1488390b0735e726564b948bf08b384398bdab5c` (2026-10-21) |
 | Proposed use | `SnapshotTesting` product, linked into test targets exclusively |
-| Recommendation | **Approve with conditions** (section 6) |
-| Confidence in recommendation | 90% |
+| Recommendation | **Decline; build an in-house rendering helper** (sections 8 and 9) |
+| Confidence in recommendation | 80% |
+| Status | Awaiting the maintainer's decision |
 
 Confidence scale: 100% means verified directly against the source or tool output. Lower values are inferences, with the estimated probability that the statement is correct.
 
@@ -70,7 +71,7 @@ The `InlineSnapshotTesting` and `SnapshotTestingCustomDump` targets fall outside
 | Custom helper built on SwiftUI `ImageRenderer` | Zero third-party code; requires writing and maintaining image comparison and tolerance logic |
 | Screenshots from UI tests only | Zero dependencies; covers whole screens, misses component states and size or appearance variants |
 
-## 6. Conditions for approval
+## 6. Conditions that would apply to an approval
 
 1. **Product:** depend on the `SnapshotTesting` product alone, declared in the `WishfullyUI` package's `Package.swift`, in test targets exclusively.
 2. **Pin:** `exact: "1.19.7"`, with `Package.resolved` committed so the revision hash is fixed.
@@ -79,6 +80,36 @@ The `InlineSnapshotTesting` and `SnapshotTestingCustomDump` targets fall outside
 5. **Updates:** every Dependabot update to this package receives a diff review against this report's risk categories before the maintainer approves it.
 6. **Re-review trigger:** a new dependency in the `SnapshotTesting` target, any build plugin, or any process or network code in a future release reopens this review.
 
-## 7. Recommendation
+## 7. Recursive dependency trace
 
-Approve `swift-snapshot-testing` 1.19.7 under the conditions above. Confidence: 90%. The main residual risk is a future compromised release, which the exact pin, cooldown and diff review address.
+The full graph was traced to depth 2 and scanned for the risk categories of section 1. Trace depth stopped at platform-conditional additions in `xctest-dynamic-overlay` because each adds its own graph (cost-benefit: the remaining graph exceeds the cost of the in-house alternative).
+
+| Package | Version | Open source | Reached by `SnapshotTesting` | Swift lines (non-test) | Findings |
+|---|---|---|---|---|---|
+| swift-snapshot-testing | 1.19.7 | Yes | Itself | 7,677 (target) | Private selectors in debug strategies; source rewriting in deprecated inline API |
+| swift-custom-dump | 1.3.3 | Yes | Fetched, compiled for other products (75%) | 3,567 | `NSExpression` appears as a type conformance for formatting; zero evaluation |
+| xctest-dynamic-overlay | 1.6.1 | Yes | Fetched, compiled for other products (75%) | 3,622 | **`dlopen` and `dlsym`** for runtime symbol lookup; on macOS the manifest adds **carton** and **swift-docc-plugin**, untraced |
+| swift-syntax | 603.0.0 | Yes | Fetched, compiled for other products (75%) | 210,615 | **`Process`** in developer tools and the parser CLI; **`dlopen`** in the macro plugin loader |
+
+Verified (100%): every package in the traced graph is open source; zero binary artifacts; zero network code. The findings in bold match the section 2 forbidden-API list of `AGENTS.md`.
+
+## 8. Build-versus-adopt estimate
+
+Estimated from measured usage of this project's agent sessions (average context per request and output per task), priced at list rates checked November 7, 2026. Request counts are inferences (70%).
+
+| Path | Requests | Cost on Claude Opus 5.5 | Cost on Claude Sonnet 5.5 |
+|---|---|---|---|
+| Adopt: review (completed) | 14 | $1.74 | $0.87 |
+| Adopt: recursive trace to depth 2 (completed) | 6 | $0.71 | $0.36 |
+| Adopt: diff review per update, about 6 updates per year | 30 per year | $3.54 per year | $1.80 per year |
+| Adopt: trace of the untraced conditional graph | unknown, larger than the build path | | |
+| Build: render-to-PNG helper on SwiftUI `ImageRenderer`, CI artifact upload | 20 | $2.28 | $1.14 |
+| Build: pixel comparison with tolerance, when regression detection is needed | 12 | $1.39 | $0.69 |
+
+The project's need is visual review of rendered screens in CI. Pixel-regression detection is a later addition. The in-house helper meets the need at a cost comparable to the review alone, with zero recurring review cost and zero third-party code in CI.
+
+## 9. Recommendation
+
+**Decline swift-snapshot-testing; build an in-house rendering helper.** Confidence: 80%.
+
+Propagated findings behind the verdict: forbidden-API categories (`dlopen`, `dlsym`, `Process`) in the transitive graph, an untraced platform-conditional subgraph on macOS, and a recurring review cost that exceeds the one-time build cost within the first year. The `SnapshotTesting` target itself is low risk (90%); the verdict follows from the graph and the cost comparison.
