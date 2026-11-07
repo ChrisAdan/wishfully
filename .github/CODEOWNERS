@@ -1,0 +1,5 @@
+# Every change is owned by the project maintainer.
+* @ChrisAdan
+
+# CI, release and dependency configuration are the most security-sensitive files.
+/.github/ @ChrisAdan

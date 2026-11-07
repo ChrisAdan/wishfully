@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Xcode (the project is generated from project.yml by XcodeGen; never commit it)
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+*.xcresult
+
+# Swift Package Manager
+.build/
+.swiftpm/
+# Package.resolved IS committed, for reproducible builds.
+
+# Signing material must never enter the repo
+*.p8
+*.p12
+*.mobileprovision
+*.cer
+
+# Local environment
+.env
+*.local.xcconfig
