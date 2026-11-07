@@ -14,7 +14,7 @@
 
 ## AGENTS.md
 
-`AGENTS.md` at the repository root holds every project rule in one file, in the format AI coding tools read by convention. `CLAUDE.md` imports it, so Claude Code loads the same rules. Six sections:
+`AGENTS.md` at the repository root holds every project rule in one file, in the format AI coding tools read by convention. `CLAUDE.md` imports it, so Claude Code loads the same rules. Seven sections:
 
 | Section | Content |
 |---|---|
@@ -24,12 +24,13 @@
 | 4. Slices | One purpose per pull request, branch names, commit format and trailer, dev-blog post per slice |
 | 5. Ask first | The changes that require the maintainer's approval |
 | 6. Writing | Voice, facts versus inferences, maintainer quotes, and the pattern table |
+| 7. Estimates | Work estimated in tokens and converted to cost at current prices |
 
 The style guide lives in section 6, and every link in the repository points there.
 
 ## The pattern table
 
-Section 6 maps 24 default language patterns produced by AI models to plain rewrites, each with an example. Four rows run in CI on every Markdown file: em dashes, `X's own Y`, change-tracking words and first-person pronouns. The other twenty (negative contrast, absence as the subject, intensifiers, hype adjectives, throat-clearing, rhetorical questions, vague quantifiers and more) apply in review. The table is written for reuse beyond this project.
+Section 6 maps 25 default language patterns produced by AI models to plain rewrites, each with an example. Five rows run in CI on every Markdown file: em dashes, `X's own Y`, change-tracking words, first-person pronouns and the word `gate`. The other twenty (negative contrast, absence as the subject, intensifiers, hype adjectives, throat-clearing, rhetorical questions, vague quantifiers and more) apply in review. The table is written for reuse beyond this project.
 
 ## Facts and inferences
 

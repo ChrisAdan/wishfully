@@ -30,10 +30,10 @@ Links are accepted for the `http` and `https` schemes exclusively; `javascript:`
 
 | Statement | Confidence |
 |---|---|
-| The importer extracts Markdown and bare web links, verified by 7 new tests (9 cases) in CI | 100% |
+| The importer extracts Markdown and bare web links, verified in CI by the link-parsing table (8 cases) and the importer integration test | 100% |
 | Apple Notes places linked text on the pasteboard as rich text with link attributes, which the app can read | 80% |
 | The real list's links all point to product pages that `PriceExtractor` can read for a price | 50% (store-dependent) |
 
 ## Next
 
-The core library is complete for the safety-net milestone. The design system and screens come next, pending the maintainer's decision on swift-snapshot-testing (review: `docs/security/reviews/2026-11-07-swift-snapshot-testing.md`).
+Slice 8: the test policy, coverage reporting and recursive dependency reviews.

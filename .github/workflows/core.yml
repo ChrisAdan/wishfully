@@ -71,5 +71,8 @@ jobs:
       - name: Build (warnings are errors)
         run: swift build --package-path Packages/WishfullyCore -Xswiftc -warnings-as-errors
 
-      - name: Test
-        run: swift test --package-path Packages/WishfullyCore -Xswiftc -warnings-as-errors
+      - name: Test (with coverage)
+        run: swift test --package-path Packages/WishfullyCore --enable-code-coverage -Xswiftc -warnings-as-errors
+
+      - name: Coverage and test count report
+        run: .github/scripts/coverage-report.sh Packages/WishfullyCore

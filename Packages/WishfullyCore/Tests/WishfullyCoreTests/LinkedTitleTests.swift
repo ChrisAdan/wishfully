@@ -4,49 +4,57 @@ import Testing
 
 @Suite("Linked titles")
 struct LinkedTitleTests {
-    @Test("A Markdown link supplies the title and the URL")
-    func markdownLink() {
-        let parsed = LinkedTitle(parsing: "[Wool scarf](https://www.shop.example/scarf?id=7)")
-        #expect(parsed.title == "Wool scarf")
-        #expect(parsed.url?.absoluteString == "https://www.shop.example/scarf?id=7")
-        #expect(LinkedTitle.store(for: parsed.url) == "shop.example")
+    struct Case: Sendable, CustomTestStringConvertible {
+        let line: String
+        let title: String
+        let url: String?
+        let store: String?
+
+        var testDescription: String {
+            line
+        }
     }
 
-    @Test("Text around a Markdown link is kept")
-    func markdownLinkWithText() {
-        let parsed = LinkedTitle(parsing: "Scarf in red [link](https://shop.example/s) size m")
-        #expect(parsed.title == "Scarf in red link size m")
-        #expect(LinkedTitle.store(for: parsed.url) == "shop.example")
-    }
-
-    @Test("A bare URL is moved out of the title, trailing punctuation trimmed")
-    func bareURL() {
-        let parsed = LinkedTitle(parsing: "Candle https://shop.example/candle.")
-        #expect(parsed.title == "Candle")
-        #expect(parsed.url?.absoluteString == "https://shop.example/candle")
-    }
-
-    @Test("A line that is only a link takes the store name as its title")
-    func linkOnly() {
-        let parsed = LinkedTitle(parsing: "https://www.shop.example/item/42")
-        #expect(parsed.title == "shop.example")
-    }
-
-    @Test("Plain text has no link")
-    func plainText() {
-        let parsed = LinkedTitle(parsing: "Silver bracelet")
-        #expect(parsed == LinkedTitle(parsing: "Silver bracelet"))
-        #expect(parsed.title == "Silver bracelet")
-        #expect(parsed.url == nil)
-    }
-
-    @Test("Non-web schemes stay as text", arguments: [
-        "[Click](javascript:alert(1))",
-        "[Mail](mailto:someone@example.com)",
-        "file:///etc/hosts",
+    @Test("Parses the title, link and store from a line", arguments: [
+        Case(
+            line: "[Wool scarf](https://www.shop.example/scarf?id=7)",
+            title: "Wool scarf",
+            url: "https://www.shop.example/scarf?id=7",
+            store: "shop.example"
+        ),
+        Case(
+            line: "Scarf in red [link](https://shop.example/s) size m",
+            title: "Scarf in red link size m",
+            url: "https://shop.example/s",
+            store: "shop.example"
+        ),
+        Case(
+            line: "Candle https://shop.example/candle.",
+            title: "Candle",
+            url: "https://shop.example/candle",
+            store: "shop.example"
+        ),
+        Case(
+            line: "https://www.shop.example/item/42",
+            title: "shop.example",
+            url: "https://www.shop.example/item/42",
+            store: "shop.example"
+        ),
+        Case(line: "Silver bracelet", title: "Silver bracelet", url: nil, store: nil),
+        Case(line: "[Click](javascript:alert(1))", title: "[Click](javascript:alert(1))", url: nil, store: nil),
+        Case(
+            line: "[Mail](mailto:someone@example.com)",
+            title: "[Mail](mailto:someone@example.com)",
+            url: nil,
+            store: nil
+        ),
+        Case(line: "file:///etc/hosts", title: "file:///etc/hosts", url: nil, store: nil),
     ])
-    func rejectsOtherSchemes(text: String) {
-        #expect(LinkedTitle(parsing: text).url == nil)
+    func parsesLine(_ testCase: Case) {
+        let parsed = LinkedTitle(parsing: testCase.line)
+        #expect(parsed.title == testCase.title)
+        #expect(parsed.url?.absoluteString == testCase.url)
+        #expect(LinkedTitle.store(for: parsed.url) == testCase.store)
     }
 
     @Test("Imported wishes carry the link and store")

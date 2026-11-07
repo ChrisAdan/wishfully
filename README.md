@@ -16,7 +16,7 @@ Native Swift 6 and SwiftUI, iOS 18 and later. Domain logic lives in `WishfullyCo
 
 ## Design principles
 
-- **Guardrails first.** Formatting, strict linting, duplicate detection and secret scanning gate every change.
+- **Guardrails first.** Every change passes formatting, strict linting, duplicate detection, secret scanning and a forbidden-API check before merge.
 - **Pure logic first.** Behavior lives in a Linux-tested package; storage and UI build on top of it.
 - **Human authority.** An AI coding agent (Claude) implements under the direction of the maintainer, who authors and approves every commit. Commits carry an `Assisted-by:` trailer. See [CONTRIBUTING.md](CONTRIBUTING.md).
 - **Small slices.** Each change is one pull request with one purpose, documented in the [dev blog](docs/devblog).

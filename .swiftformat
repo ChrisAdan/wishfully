@@ -1,4 +1,4 @@
-# SwiftFormat: deterministic formatting. CI runs `swiftformat --lint .` as a hard gate;
+# SwiftFormat: deterministic formatting. CI fails on any formatting difference;
 # run `swiftformat .` locally to fix. Rules not listed here use SwiftFormat defaults.
 --swiftversion 6.0
 --indent 4

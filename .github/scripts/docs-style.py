@@ -13,6 +13,7 @@ RULES = [
     ("em dash (row 1)", re.compile("—")),
     ("'X's own Y' (row 2)", re.compile(r"\b\w+['’]s own\b", re.IGNORECASE)),
     ("change tracking (row 3)", re.compile(r"\b(formerly|previously|no longer|used to)\b", re.IGNORECASE)),
+    ("'gate' (row 25)", re.compile(r"\bgat(e|es|ed|ing)\b", re.IGNORECASE)),
 ]
 FIRST_PERSON = (
     "first person (row 4)",
