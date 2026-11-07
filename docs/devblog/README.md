@@ -6,3 +6,4 @@ A build log for Wishfully, written as each slice of work lands. Posts are drafte
 |---|---|---|
 | 000 | [Building a gift-list app with an agent, in the open](000-building-in-the-open.md) | Repo foundations |
 | 001 | [Guardrails before code](001-guardrails-before-code.md) | Core CI pipeline |
+| 002 | [The domain, in pure Swift](002-the-domain-in-pure-swift.md) | WishfullyCore models |
