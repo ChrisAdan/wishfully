@@ -46,7 +46,7 @@ The real list stays out of the repository. Tests use an invented note with the s
 
 ## Tests
 
-Eleven new tests (twelve cases) cover the title, item text, categories, the headless block, order through the shopping-list sort, defaults, notes without a title, uncategorized items, Windows line endings, trailing whitespace, empty markers, separators, emoji-only headings and the empty note.
+Eleven new tests (13 cases) cover the title, item text, categories, the headless block, order through the shopping-list sort, defaults, notes without a title, uncategorized items, Windows line endings, trailing whitespace, empty markers, separators, emoji-only headings and the empty note.
 
 ## Next
 
