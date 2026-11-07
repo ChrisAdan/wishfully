@@ -8,6 +8,21 @@
 # (never in project.yml) so Dependabot can see them.
 version: 2
 updates:
+  - package-ecosystem: "swift"
+    directories:
+      - "/Packages/WishfullyCore"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "swift"]
+    commit-message:
+      prefix: "build"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

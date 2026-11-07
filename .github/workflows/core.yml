@@ -1,6 +1,5 @@
 # Core guardrails: runs on every push to main and every pull request.
-# Linux-only, so it's fast and free. Swift tests join this workflow when the
-# first Swift package lands.
+# Linux-only, so it's fast and free.
 name: core
 
 on:
@@ -34,7 +33,7 @@ jobs:
           echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
 
       - name: Format (SwiftFormat)
-        run: swiftformat --lint .
+        run: .github/scripts/format-check.sh
 
       - name: Lint (SwiftLint)
         run: swiftlint lint --strict --quiet
@@ -46,3 +45,25 @@ jobs:
 
       - name: Secrets (gitleaks, full history)
         run: gitleaks git --redact --verbose --exit-code 1 .
+
+  core-tests:
+    name: WishfullyCore tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    # Official Swift image, pinned by digest (swift:6.3 = 6.3.3-RELEASE).
+    # A digest can't be repointed the way a tag can.
+    container: swift:6.3@sha256:1038d54c80063f5cdfabc4560990c30af64b5de8ebf28161deb22ca4ad5db866
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain
+        run: swift --version
+
+      - name: Build (warnings are errors)
+        run: swift build --package-path Packages/WishfullyCore -Xswiftc -warnings-as-errors
+
+      - name: Test
+        run: swift test --package-path Packages/WishfullyCore -Xswiftc -warnings-as-errors
