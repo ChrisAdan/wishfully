@@ -1,0 +1,11 @@
+# SwiftFormat: deterministic formatting. CI runs `swiftformat --lint .` as a hard gate;
+# run `swiftformat .` locally to fix. Rules not listed here use SwiftFormat defaults.
+--swiftversion 6.0
+--indent 4
+--maxwidth 120
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--stripunusedargs closure-only
+--header strip
+--exclude .build,DerivedData,**/*.generated.swift

@@ -1,0 +1,11 @@
+{
+  "$comment": "Copy-paste detector: enforces DRY. Fails CI when duplicated Swift blocks exceed the threshold.",
+  "format": ["swift"],
+  "path": ["."],
+  "ignore": ["**/.build/**", "**/DerivedData/**", "**/node_modules/**", "docs/**"],
+  "minTokens": 60,
+  "threshold": 1,
+  "reporters": ["console"],
+  "exitCode": 1,
+  "gitignore": true
+}
