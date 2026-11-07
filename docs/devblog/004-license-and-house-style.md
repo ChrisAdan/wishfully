@@ -24,4 +24,4 @@ Every document in the repository follows the guide, and the check runs green.
 
 ## Next
 
-Slice 5: the note importer, built around the format of the real list.
+Slice 5: the note importer.

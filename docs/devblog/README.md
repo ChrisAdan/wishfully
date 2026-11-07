@@ -9,3 +9,4 @@ The build log for Wishfully, one post per slice of work. Posts are drafted by Cl
 | 002 | [The domain, in pure Swift](002-the-domain-in-pure-swift.md) | WishfullyCore models |
 | 003 | [Reading prices from hostile pages](003-reading-prices-from-hostile-pages.md) | Price extraction |
 | 004 | [License and house style](004-license-and-house-style.md) | MIT license and writing style |
+| 005 | [Importing the real list](005-importing-the-real-list.md) | Note importer |
