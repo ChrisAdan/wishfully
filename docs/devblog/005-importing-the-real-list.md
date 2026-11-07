@@ -50,4 +50,4 @@ Eleven new tests (13 cases) cover the title, item text, categories, the headless
 
 ## Next
 
-The remaining Core work is complete. The next slices bring the app itself: the design system and screens on GitHub's macOS runners, which need the snapshot-testing dependency approved, and the Xcode project and TestFlight pipeline, which need the Apple Developer account.
+Slice 6: `AGENTS.md` and the hard rules.

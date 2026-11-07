@@ -8,7 +8,7 @@ Wishfully is MIT licensed. The code is open for anyone to use, and the project's
 
 ## House style
 
-Documentation follows a single style guide, `docs/STYLE.md`. The core rules:
+Documentation follows the writing rules in `AGENTS.md`. The core rules:
 
 - **Third person, on behalf of the maintainer.** Documents speak for the project; decision records carry the maintainer's voice.
 - **Positive framing.** Documents state what things do and guarantee.

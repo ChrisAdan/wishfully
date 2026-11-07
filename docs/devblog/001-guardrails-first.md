@@ -16,7 +16,8 @@ The **Guardrails** job runs on Linux in about a minute:
 | Lint | SwiftLint (strict) | Safe optional handling: force unwraps, force casts and `try!` are errors | `ruff check` |
 | Duplication | jscpd | Duplicated Swift stays under 1% of the codebase, which enforces DRY | |
 | Secrets | gitleaks | A clean secret scan across the entire git history | `detect-secrets` |
-| Docs style | `docs-style.py` | The mechanical rules in `docs/STYLE.md` | |
+| Docs style | `docs-style.py` | The CI rows of the pattern table in `AGENTS.md` | |
+| Forbidden APIs | `forbidden-apis.py` | Zero process execution and zero dynamic evaluation in project code | `bandit` (partial) |
 
 ## Supply-chain design
 
