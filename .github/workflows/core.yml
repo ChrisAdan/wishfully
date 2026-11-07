@@ -1,0 +1,48 @@
+# Core guardrails: runs on every push to main and every pull request.
+# Linux-only, so it's fast and free. Swift tests join this workflow when the
+# first Swift package lands.
+name: core
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: this workflow only reads the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: core-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guardrails:
+    name: Guardrails
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # full history, so the secret scan covers every commit
+          persist-credentials: false
+
+      - name: Install pinned tools (checksum-verified)
+        run: |
+          .github/scripts/install-tools.sh "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Format (SwiftFormat)
+        run: swiftformat --lint .
+
+      - name: Lint (SwiftLint)
+        run: swiftlint lint --strict --quiet
+
+      - name: Duplication (jscpd)
+        run: |
+          npm install --no-save --ignore-scripts --prefix "$RUNNER_TEMP/jscpd" jscpd@5.4.2
+          "$RUNNER_TEMP/jscpd/node_modules/.bin/jscpd" --config .jscpd.json
+
+      - name: Secrets (gitleaks, full history)
+        run: gitleaks git --redact --verbose --exit-code 1 .

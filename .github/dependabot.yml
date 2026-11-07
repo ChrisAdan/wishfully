@@ -1,0 +1,26 @@
+# Dependabot proposes dependency updates as pull requests. Nothing merges
+# automatically: every update is reviewed and approved by the maintainer.
+# New releases must age 7 days (cooldown) before being proposed, which gives the
+# community time to catch compromised releases.
+#
+# Swift package entries are added as each package under /Packages is created;
+# all external Swift dependencies are declared in those Package.swift files
+# (never in project.yml) so Dependabot can see them.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "ci"]
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns: ["*"]

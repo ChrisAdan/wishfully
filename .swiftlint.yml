@@ -1,0 +1,34 @@
+# SwiftLint: correctness and crash-prevention rules. CI runs with --strict,
+# so every warning fails the build.
+excluded:
+  - .build
+  - DerivedData
+  - "**/.build"
+
+opt_in_rules:
+  - force_unwrapping              # no `!` unwraps
+  - implicitly_unwrapped_optional # no `Type!` declarations
+  - empty_count
+  - first_where
+  - contains_over_filter_count
+  - discouraged_optional_boolean
+  - fatal_error_message
+  - unowned_variable_capture
+  - private_swiftui_state
+
+# Formatting is SwiftFormat's job; avoid the two tools fighting.
+disabled_rules:
+  - trailing_comma
+  - opening_brace
+  - line_length
+
+force_cast: error
+force_try: error
+force_unwrapping: error
+implicitly_unwrapped_optional: error
+
+identifier_name:
+  excluded: [id, x, y, to]
+
+# The repo has no Swift files until the first package lands.
+allow_zero_lintable_files: true
