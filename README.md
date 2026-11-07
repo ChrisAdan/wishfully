@@ -1,37 +1,40 @@
 # Wishfully
 
-A small, cozy iPhone app for gift lists. One person adds things they'd love from any app's Share sheet; the person shopping for them sees the list, shops from it, and marks things bought, without ever spoiling the surprise.
+A cozy iPhone app for gift lists. The recipient adds things from any app's Share sheet. The shopper sees the same list, shops from it and marks items bought, and the surprise stays intact.
 
-> **Status:** early development, building toward Christmas 2026. Not yet on the App Store.
+> **Status:** early development, targeting Christmas 2026. Builds are distributed through TestFlight.
 
 ## How it works
 
-- **Add from anywhere.** Share a product page to Wishfully. It picks up the photo, title and (when the store publishes it) the price.
-- **One shared list.** The list syncs between two iPhones through iCloud. There is no Wishfully server.
-- **Secret by design.** Whatever the shopper records (bought, wrapped, price paid) lives only in the shopper's own iCloud, so it can never appear on the recipient's phone.
+- **Add from anywhere.** Sharing a product page to Wishfully captures the photo, the title and, when the store publishes one, the price.
+- **One shared list.** The list syncs between two iPhones through iCloud. Apple's CloudKit is the entire backend.
+- **Secret by design.** Purchase records (bought, wrapped, price paid) live in the shopper's private iCloud database, separate from the recipient's data.
 
-## Architecture in one paragraph
+## Architecture
 
-Native Swift 6 / SwiftUI, iOS 18+. Logic lives in a pure Swift package (`WishfullyCore`) that is tested on Linux. Storage is Core Data on device, synced and shared with CloudKit using Apple's two-store (private + shared) pattern. The app ships **no third-party code**: only Apple frameworks and this repository. See [`docs/decisions`](docs/decisions) for the reasoning behind each choice.
+Native Swift 6 and SwiftUI, iOS 18 and later. Domain logic lives in `WishfullyCore`, a pure Swift package tested on Linux. Storage is Core Data on the device, synced and shared through CloudKit using Apple's two-store pattern (private and shared). The shipped app contains Apple frameworks and code from this repository exclusively. Decision records in [`docs/decisions`](docs/decisions) explain each choice.
 
-## Building in the open
+## Design principles
 
-This project is built with an AI coding agent (Claude) under human direction. Every commit is authored and reviewed by a human and carries an `Assisted-by:` trailer. The policy is in [CONTRIBUTING.md](CONTRIBUTING.md). The build is narrated slice by slice in the [dev blog](docs/devblog).
+- **Guardrails first.** Formatting, strict linting, duplicate detection and secret scanning gate every change.
+- **Pure logic first.** Behavior lives in a Linux-tested package; storage and UI build on top of it.
+- **Human authority.** An AI coding agent (Claude) implements under the direction of the maintainer, who authors and approves every commit. Commits carry an `Assisted-by:` trailer. See [CONTRIBUTING.md](CONTRIBUTING.md).
+- **Small slices.** Each change is one pull request with one purpose, documented in the [dev blog](docs/devblog).
 
 ## Repository layout
 
 ```
-docs/decisions/   Decision records: why things are the way they are
-docs/devblog/     Build log, one post per slice of work
-.github/          CI workflows, Dependabot, code owners
+Packages/WishfullyCore/  Domain models and price extraction (pure Swift)
+docs/decisions/          Decision records
+docs/devblog/            Build log, one post per slice
+docs/STYLE.md            Writing style for all documentation
+.github/                 CI workflows, scripts, Dependabot, code owners
 ```
-
-More directories (`Packages/`, `App/`, `ShareExtension/`) arrive as the build progresses.
 
 ## Security
 
-See [SECURITY.md](SECURITY.md) to report a vulnerability.
+See [SECURITY.md](SECURITY.md) for the security model and private vulnerability reporting.
 
 ## License
 
-Copyright © 2026 Chris Adan. All rights reserved. A license has not been chosen yet; until one is added, no rights to reuse this code are granted.
+[MIT](LICENSE) © 2026 Chris Adan

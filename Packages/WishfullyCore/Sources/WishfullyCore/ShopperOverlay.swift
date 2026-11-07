@@ -13,8 +13,8 @@ public enum PurchaseStatus: String, CaseIterable, Codable, Sendable {
 
 /// The shopper's private layer over one wish.
 ///
-/// Stored only in the shopper's own iCloud database, never in the recipient's,
-/// so purchases can't leak to the recipient. It points at the wish by ID
+/// Stored in the shopper's private iCloud database, separate from the
+/// recipient's data, which keeps purchases private. It points at the wish by ID
 /// because Core Data can't relate objects across the private and shared stores.
 public struct ShopperOverlay: Hashable, Codable, Sendable {
     public let wishID: Wish.ID

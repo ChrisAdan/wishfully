@@ -1,10 +1,11 @@
 # Wishfully dev blog
 
-A build log for Wishfully, written as each slice of work lands. Posts are drafted with Claude (the coding agent doing the work) and edited by Chris.
+The build log for Wishfully, one post per slice of work. Posts are drafted by Claude, the coding agent, for the maintainer.
 
 | # | Post | Slice |
 |---|---|---|
-| 000 | [Building a gift-list app with an agent, in the open](000-building-in-the-open.md) | Repo foundations |
-| 001 | [Guardrails before code](001-guardrails-before-code.md) | Core CI pipeline |
+| 000 | [Project principles](000-project-principles.md) | Repository foundations |
+| 001 | [Guardrails first](001-guardrails-first.md) | Core CI pipeline |
 | 002 | [The domain, in pure Swift](002-the-domain-in-pure-swift.md) | WishfullyCore models |
 | 003 | [Reading prices from hostile pages](003-reading-prices-from-hostile-pages.md) | Price extraction |
+| 004 | [License and house style](004-license-and-house-style.md) | MIT license and writing style |
