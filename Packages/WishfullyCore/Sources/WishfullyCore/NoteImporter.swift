@@ -16,6 +16,7 @@ public struct NoteImport: Equatable, Sendable {
 ///
 /// Format rules:
 /// - A line starting with a checklist or bullet marker (`- [ ]`, `- [x]`, `-`, `*`, `•`, `☐`) is a wish.
+///   A Markdown link or bare web URL in the line becomes the wish's link, and its host the store.
 /// - Any other text line is a heading; it becomes the category for the wishes below it.
 ///   Emoji in headings are dropped from the category name ("Style 🎀" becomes "Style").
 /// - A heading followed directly by another heading, before any wish, is the list title.
@@ -30,6 +31,8 @@ public enum NoteImporter {
         let wishes = state.items.enumerated().map { index, item in
             Wish(
                 title: item.title,
+                url: item.url,
+                store: LinkedTitle.store(for: item.url),
                 category: item.category,
                 // Millisecond steps keep note order under the oldest-first sort.
                 createdAt: importedAt.addingTimeInterval(Double(index) / 1000)
@@ -44,6 +47,7 @@ public enum NoteImporter {
 private struct ParseState {
     struct Item {
         let title: String
+        let url: URL?
         let category: String?
     }
 
@@ -59,8 +63,8 @@ private struct ParseState {
 
     mutating func consume(_ line: NoteLine) {
         switch line {
-        case let .wish(text):
-            items.append(Item(title: text, category: heading?.category))
+        case let .wish(linked):
+            items.append(Item(title: linked.title, url: linked.url, category: heading?.category))
             itemsUnderHeading += 1
         case let .heading(raw, category):
             if let previous = heading, itemsUnderHeading == 0, items.isEmpty, title == nil {
@@ -75,7 +79,7 @@ private struct ParseState {
 }
 
 private enum NoteLine {
-    case wish(String)
+    case wish(LinkedTitle)
     case heading(raw: String, category: String)
     case skip
 
@@ -102,7 +106,7 @@ private enum NoteLine {
             self = .skip
         } else if let marker = Self.markers.first(where: { line.hasPrefix($0) }) {
             let text = Self.collapsingWhitespace(String(line.dropFirst(marker.count)))
-            self = text.isEmpty ? .skip : .wish(text)
+            self = text.isEmpty ? .skip : .wish(LinkedTitle(parsing: text))
         } else {
             let category = Self.categoryName(from: line)
             self = .heading(raw: Self.collapsingWhitespace(line), category: category.isEmpty ? line : category)
