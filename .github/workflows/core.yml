@@ -33,7 +33,7 @@ jobs:
           echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
 
       - name: Format (SwiftFormat)
-        run: swiftformat --lint .
+        run: .github/scripts/format-check.sh
 
       - name: Lint (SwiftLint)
         run: swiftlint lint --strict --quiet

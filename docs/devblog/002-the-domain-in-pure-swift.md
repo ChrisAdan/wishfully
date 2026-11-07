@@ -36,6 +36,14 @@ The agent can lint and format Swift in its workspace, and that caught three issu
 
 One follow-up came out of that run: the CI log printed the exact Swift container digest, so the workflow now pins the image by digest instead of by tag. The agent couldn't look that digest up beforehand because Docker Hub is blocked from its workspace, so the first CI run was how we observed it.
 
+## The first flaky failure
+
+The very next run failed, on code that hadn't changed: **SwiftFormat segfaulted** in the Guardrails job. The agent ran the same check 40 times in its own workspace without a single crash. Its machine has 2 cores; the CI runner has 4. That points to a threading bug in SwiftFormat's Linux build when it checks many files in parallel, and SwiftFormat has no switch to turn parallelism off.
+
+The fix isn't to make the check optional or blindly retry the job. Instead, a small script checks **one file per SwiftFormat process**, which removes the tool's internal concurrency entirely. As a backstop, a file whose check *crashes* (exit 139) gets one retry, with a visible warning in the CI log. A real formatting violation is never retried: it still fails the build. The agent verified both paths locally: clean code passes, a badly formatted file fails.
+
+The lesson for agentic work: when a check flakes, the agent shouldn't weaken it to get green. It should find the mechanism, fix that, and leave a trail.
+
 ## Next
 
 Slice 3: `PriceExtractor`. Given the HTML of a product page, find the price, if the store publishes one, without trusting anything about the page.
