@@ -29,4 +29,4 @@ Wishfully is implemented by an AI coding agent under the direction of the mainta
 
 ## Writing style
 
-All documentation follows [docs/STYLE.md](docs/STYLE.md).
+All documentation follows the writing rules and pattern table in [AGENTS.md](AGENTS.md).

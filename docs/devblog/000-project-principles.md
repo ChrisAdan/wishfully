@@ -8,6 +8,16 @@ Gift lists kept in a note are hard to shop from. Adding an item from Safari mean
 
 **Wishfully** solves this. The recipient shares products to it from any app. The shopper shops from the same list on a second phone and records purchases privately.
 
+## From the maintainer
+
+> **Maintainer:** I hate shopping for gifts.
+
+> **Maintainer:** UX is critical, she won't use it if it's not cute and aesthetic and natural feeling. So keep that code complexity to a minimum.
+
+> **Maintainer:** Time is limited so best not lose focus on the actual goal which is buying her stuff.
+
+> **Maintainer:** I could inadvertently be loading a backdoor onto my wife's phone.
+
 ## Constraints
 
 - **Deadline:** Christmas 2026, seven weeks out.

@@ -43,8 +43,11 @@ jobs:
           npm install --no-save --ignore-scripts --prefix "$RUNNER_TEMP/jscpd" jscpd@5.4.2
           "$RUNNER_TEMP/jscpd/node_modules/.bin/jscpd" --config .jscpd.json
 
-      - name: Docs style (docs/STYLE.md)
+      - name: Docs style (AGENTS.md pattern table)
         run: python3 .github/scripts/docs-style.py
+
+      - name: Forbidden APIs (AGENTS.md, section 2)
+        run: python3 .github/scripts/forbidden-apis.py
 
       - name: Secrets (gitleaks, full history)
         run: gitleaks git --redact --verbose --exit-code 1 .
