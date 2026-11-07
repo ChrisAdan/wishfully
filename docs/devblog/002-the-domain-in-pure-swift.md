@@ -32,7 +32,9 @@ This slice is about 300 lines: 8 small source files and 3 test files, one concep
 
 ## What the agent couldn't verify locally
 
-The agent can lint and format Swift in its workspace, and that caught three issues before pushing: a comment style, an overly strict naming rule for `ID`, and a safer way to convert data to text in a test. But it can't compile Swift there. The first real compile of this code happens in CI, so if it fails, the fix is the next commit, and the blog will say so.
+The agent can lint and format Swift in its workspace, and that caught three issues before pushing: a comment style, an overly strict naming rule for `ID`, and a safer way to convert data to text in a test. But it can't compile Swift there, so the first real compile of this code happened in CI. It passed first time: Swift 6.3.3, all 13 tests green.
+
+One follow-up came out of that run: the CI log printed the exact Swift container digest, so the workflow now pins the image by digest instead of by tag. The agent couldn't look that digest up beforehand because Docker Hub is blocked from its workspace, so the first CI run was how we observed it.
 
 ## Next
 

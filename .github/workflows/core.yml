@@ -50,10 +50,9 @@ jobs:
     name: WishfullyCore tests
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    # Official Swift image. The tag is pinned to a minor version; the digest is
-    # printed below and will be pinned once observed (Docker Hub isn't reachable
-    # from the agent's workspace).
-    container: swift:6.3
+    # Official Swift image, pinned by digest (swift:6.3 = 6.3.3-RELEASE).
+    # A digest can't be repointed the way a tag can.
+    container: swift:6.3@sha256:1038d54c80063f5cdfabc4560990c30af64b5de8ebf28161deb22ca4ad5db866
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
