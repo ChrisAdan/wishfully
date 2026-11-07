@@ -30,7 +30,7 @@ The style guide lives in section 6, and every link in the repository points ther
 
 ## The pattern table
 
-Section 6 maps 25 default language patterns produced by AI models to plain rewrites, each with an example. Five rows run in CI on every Markdown file: em dashes, `X's own Y`, change-tracking words, first-person pronouns and the word `gate`. The other twenty (negative contrast, absence as the subject, intensifiers, hype adjectives, throat-clearing, rhetorical questions, vague quantifiers and more) apply in review. The table is written for reuse beyond this project.
+Section 6 maps 27 default language patterns produced by AI models to plain rewrites, each with an example. Seven rows run in CI on every Markdown file: em dashes, `X's own Y`, change-tracking words, first-person pronouns, the word `gate`, sentence-initial `Never` and negation lists. The other twenty (negative contrast, absence as the subject, intensifiers, hype adjectives, throat-clearing, rhetorical questions, vague quantifiers and more) apply in review. The table is written for reuse beyond this project.
 
 ## Facts and inferences
 

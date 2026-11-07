@@ -11,7 +11,7 @@
 | Proposed use | `SnapshotTesting` product, linked into test targets exclusively |
 | Recommendation | **Decline; build an in-house rendering helper** (sections 8 and 9) |
 | Confidence in recommendation | 80% |
-| Status | Awaiting the maintainer's decision |
+| Status | Decided: declined (decision 0007) |
 
 Confidence scale: 100% means verified directly against the source or tool output. Lower values are inferences, with the estimated probability that the statement is correct.
 

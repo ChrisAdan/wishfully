@@ -33,7 +33,7 @@ Link parsing (7 tests) and price extraction (9 tests) each became one table-driv
 
 Section 2 of `AGENTS.md` makes every dependency evaluation a six-step sequence: a build-versus-adopt estimate in tokens, a recursive trace of the full graph, a scan of every package, propagation of every finding to the verdict, an abort on closed source, and maintainer approval with an exact pin. `docs/security/reviews/TEMPLATE.md` carries the structure.
 
-The swift-snapshot-testing review applies the sequence. The `SnapshotTesting` target itself rates low risk (90%). The traced graph contains `dlopen` and `dlsym` (xctest-dynamic-overlay) and `Process` (swift-syntax developer tools), both on the forbidden list, plus an untraced platform-conditional subgraph on macOS. The token estimate puts the in-house alternative (a render-to-PNG helper on SwiftUI `ImageRenderer`) at about 20 requests, close to the review cost, with zero recurring update reviews. The propagated verdict recommends the in-house helper (80%), pending the maintainer's decision.
+The swift-snapshot-testing review applies the sequence. The `SnapshotTesting` target itself rates low risk (90%). The traced graph contains `dlopen` and `dlsym` (xctest-dynamic-overlay) and `Process` (swift-syntax developer tools), both on the forbidden list, plus an untraced platform-conditional subgraph on macOS. The token estimate puts the in-house alternative (a render-to-PNG helper on SwiftUI `ImageRenderer`) at about 20 requests, close to the review cost, with zero recurring update reviews. The propagated verdict recommends the in-house helper (80%); the maintainer accepted it (decision 0007).
 
 ## Token estimates
 
@@ -45,4 +45,4 @@ The word `gate` joins the CI-enforced patterns. Rewrites: `enables`, `unblocks`,
 
 ## Next
 
-The design system and screens, after the maintainer's decision on snapshot rendering.
+Slice 9: decision records and attribution.
