@@ -14,3 +14,4 @@ The build log for Wishfully, one post per slice of work. Posts are drafted by Cl
 | 007 | [Product links in the import](007-product-links-in-the-import.md) | Links in the note importer |
 | 008 | [Tests, dependencies and token estimates](008-tests-dependencies-and-token-estimates.md) | Test policy, coverage, recursive dependency reviews |
 | 009 | [Decision records and attribution](009-decision-records-and-attribution.md) | Decision records, attribution, patterns 26 and 27 |
+| 010 | [v0 decisions and paperwork](010-v0-decisions-and-paperwork.md) | Data safety, accessibility, diagnostics, paperwork drafts, usage log |

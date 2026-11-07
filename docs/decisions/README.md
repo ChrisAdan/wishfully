@@ -17,3 +17,6 @@
 | 0011 | [Token-based estimates](0011-token-based-estimates.md) | Accepted |
 | 0012 | [Writing rules and the AI pattern table](0012-writing-rules-and-the-ai-pattern-table.md) | Accepted |
 | 0013 | [Decision records quote the maintainer](0013-decision-records-quote-the-maintainer.md) | Accepted |
+| 0014 | [Data safety layers beyond iCloud sync](0014-data-safety-layers.md) | Accepted |
+| 0015 | [Accessibility scope by release](0015-accessibility-scope.md) | Accepted |
+| 0016 | [On-device diagnostics](0016-on-device-diagnostics.md) | Accepted |
