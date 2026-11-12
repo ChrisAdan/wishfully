@@ -13,6 +13,7 @@ Prices per million tokens, checked 2026-11-07:
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-11-07 | Session 1, measured part | 189 | 410 | 1,274,770 | 72,784,039 | 258,193 | $29.92 | $4.56 | Slices 1 to 9, CI, dossier, reviews |
 | 2026-11-07 | Session 1, after summary | 12 | 26 | 136,387 | 2,104,031 | 16,060 | $1.83 | $0.21 | v0.0.1 decisions PDF |
-| | **Running total** | **201** | | | | | **$31.75** | **$4.77** | |
+| 2026-11-12 | Session 2, to the first CI fix | 66 | 128 | 251,919 | 15,487,243 | 129,111 | $7.70 | $1.10 | Slice 11: app, Share extension, sync, CI, signing, decisions |
+| | **Running total** | **267** | | | | | **$39.45** | **$5.87** | |
 
 Coverage: one reply in the second segment has no usage on record, and the stretch between the first measurement and the summary may be uncounted (inferred, 50%).
