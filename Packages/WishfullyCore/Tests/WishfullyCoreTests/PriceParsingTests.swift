@@ -17,6 +17,7 @@ struct PriceParsingTests {
     ])
     func parsesFormats(raw: String, expected: String) {
         #expect(PriceParsing.amount(from: raw) == Decimal(string: expected))
+        #expect(Money(parsing: raw, currencyCode: "eur")?.amount == Decimal(string: expected))
     }
 
     @Test("Text that isn't a plausible price is rejected", arguments: [
@@ -24,6 +25,7 @@ struct PriceParsingTests {
     ])
     func rejectsJunk(raw: String) {
         #expect(PriceParsing.amount(from: raw) == nil)
+        #expect(Money(parsing: raw) == nil)
     }
 
     @Test("Currency codes must be three letters")

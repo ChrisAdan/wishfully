@@ -1,0 +1,69 @@
+# iOS app build: compiles the app and its Share extension for the simulator, launches the app and
+# saves a screenshot. Runs on pushes and pull requests that touch the app or the core package.
+# The repository is public, so macOS runners cost no Actions minutes.
+name: ios
+
+on:
+  push:
+    paths: ["App/**", "Packages/**", ".github/workflows/ios.yml"]
+  pull_request:
+    paths: ["App/**", "Packages/**", ".github/workflows/ios.yml"]
+  workflow_dispatch:
+
+# Least privilege: this workflow only reads the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simulator:
+    name: Build and launch (simulator)
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # The newest Xcode 26 on the runner image, the SDK App Store Connect requires.
+      - name: Select Xcode 26
+        run: |
+          XCODE="$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)"
+          if [ -z "$XCODE" ]; then echo "No Xcode 26 on this runner image." >&2; ls -d /Applications/Xcode*.app; exit 1; fi
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Build (Debug, simulator, warnings are errors)
+        run: |
+          set -o pipefail
+          xcodebuild -project App/Wishfully.xcodeproj -scheme Wishfully -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build 2>&1 | tee build.log | grep -E "error:|warning:|BUILD" || true
+          grep -q "BUILD SUCCEEDED" build.log
+
+      - name: Launch and screenshot
+        run: |
+          DEVICE="$(xcrun simctl list devices available -j | jq -r '[.devices[][] | select(.name | startswith("iPhone"))][0].udid')"
+          xcrun simctl boot "$DEVICE"
+          xcrun simctl bootstatus "$DEVICE" -b
+          xcrun simctl install "$DEVICE" build/Build/Products/Debug-iphonesimulator/Wishfully.app
+          xcrun simctl launch "$DEVICE" com.cambrium.wishfully
+          sleep 15
+          mkdir -p shots
+          xcrun simctl io "$DEVICE" screenshot shots/launch.png
+          # A crash on launch ends the process; this fails the step when it is gone.
+          xcrun simctl spawn "$DEVICE" launchctl list | grep -q com.cambrium.wishfully
+
+      - name: Upload screenshot and log
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: simulator
+          path: |
+            shots
+            build.log
+          if-no-files-found: warn

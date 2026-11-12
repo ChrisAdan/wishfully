@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Keys Xcode cannot generate from build settings; it merges the rest. CKSharingSupported lets
+     iOS open the app when the shopper taps a shared list's link. -->
+<plist version="1.0">
+<dict>
+	<key>CKSharingSupported</key>
+	<true/>
+</dict>
+</plist>

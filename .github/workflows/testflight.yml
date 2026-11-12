@@ -1,0 +1,106 @@
+# TestFlight: archives the app with its Share extension, signs it and uploads it to App Store
+# Connect for the internal TestFlight group (decision 0018). The maintainer works without a Mac,
+# so this is the route to the phones.
+#
+# Runs on manual dispatch, or on a push whose head commit message contains "[testflight]" (manual
+# dispatch needs the workflow on main). Secrets live in the protected `release` environment.
+name: testflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      purpose:
+        description: Why this build goes to TestFlight
+        required: true
+        type: string
+  push:
+    branches: ["claude/**"]
+
+# Least privilege: this workflow only reads the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: testflight
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    name: Archive and upload to TestFlight
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[testflight]')
+    runs-on: macos-15
+    timeout-minutes: 45
+    environment: release
+    env:
+      PURPOSE: ${{ inputs.purpose || github.event.head_commit.message }}
+      # The build number App Store Connect sees: this workflow's run number, which only rises.
+      BUILD_NUMBER: ${{ github.run_number }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+    steps:
+      - name: Purpose
+        run: |
+          printf 'Purpose of this run: %s (build %s)\n' "$PURPOSE" "$BUILD_NUMBER" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Paths
+        run: |
+          echo "ARCHIVE=$RUNNER_TEMP/Wishfully.xcarchive" >> "$GITHUB_ENV"
+          echo "KEY_PATH=$RUNNER_TEMP/asc/AuthKey.p8" >> "$GITHUB_ENV"
+          echo "SIGNING_DIR=$RUNNER_TEMP/signing" >> "$GITHUB_ENV"
+
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode 26
+        run: |
+          XCODE="$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)"
+          if [ -z "$XCODE" ]; then echo "No Xcode 26 on this runner image." >&2; ls -d /Applications/Xcode*.app; exit 1; fi
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: API key
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_P8 must be set in the release environment." >&2
+            exit 1
+          fi
+          umask 077
+          mkdir -p "$(dirname "$KEY_PATH")"
+          printf '%s\n' "$ASC_KEY_P8" > "$KEY_PATH"
+
+      - name: Signing certificate and profiles
+        run: .github/scripts/asc-signing.sh setup
+
+      - name: Archive (Release, device)
+        run: |
+          set -o pipefail
+          xcodebuild -project App/Wishfully.xcodeproj -scheme Wishfully -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$ARCHIVE" \
+            CURRENT_PROJECT_VERSION="$BUILD_NUMBER" OTHER_CODE_SIGN_FLAGS="--keychain $SIGNING_DIR/signing.keychain-db" \
+            archive 2>&1 | tee "$RUNNER_TEMP/archive.log" | grep -E "error:|warning:|ARCHIVE" || true
+          grep -q "ARCHIVE SUCCEEDED" "$RUNNER_TEMP/archive.log"
+
+      - name: Show signed entitlements
+        run: |
+          APP="$ARCHIVE/Products/Applications/Wishfully.app"
+          codesign -d --entitlements - "$APP"
+          codesign -d --entitlements - "$APP/PlugIns/WishfullyShare.appex"
+
+      - name: Export and upload
+        run: |
+          xcodebuild -exportArchive -archivePath "$ARCHIVE" \
+            -exportOptionsPlist .github/testflight/ExportOptions.plist \
+            -exportPath "$RUNNER_TEMP/export" \
+            -authenticationKeyPath "$KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+          echo "Uploaded build $BUILD_NUMBER; it appears in TestFlight after processing." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Revoke the run's certificate and profiles
+        if: always()
+        run: |
+          if [ -f "$KEY_PATH" ]; then .github/scripts/asc-signing.sh cleanup; fi
+          rm -rf "$(dirname "$KEY_PATH")"

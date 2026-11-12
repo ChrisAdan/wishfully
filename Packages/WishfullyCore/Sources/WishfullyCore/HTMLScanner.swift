@@ -1,7 +1,7 @@
 import Foundation
 
 /// One HTML start tag, with lower-cased name and attribute keys.
-/// `content` is filled in only for `<script>` tags: the raw text of the script.
+/// `content` is filled in only for `<script>` and `<title>` tags: the raw text up to the closing tag.
 struct HTMLTag: Equatable, Sendable {
     let name: String
     let attributes: [String: String]
@@ -57,7 +57,7 @@ struct HTMLScanner {
         let name = readName().lowercased()
         let attributes = readAttributes()
         position = min(position + 1, chars.count) // step past ">"
-        let content = name == "script" ? readScriptContent() : nil
+        let content = Self.rawTextTags.contains(name) ? readRawText(until: name) : nil
         return HTMLTag(name: name, attributes: attributes, content: content)
     }
 
@@ -100,10 +100,14 @@ struct HTMLScanner {
         read(while: Self.isNameCharacter)
     }
 
-    /// Returns the raw text up to `</script`, then moves past it.
-    private mutating func readScriptContent() -> String {
+    /// Tags whose text is kept, because a scanner would misread it as markup (scripts) or because
+    /// the text is the value (titles).
+    private static let rawTextTags: Set = ["script", "title"]
+
+    /// Returns the raw text up to `</name`, then moves past it.
+    private mutating func readRawText(until name: String) -> String {
         let start = min(position, chars.count)
-        let end = find(Array("</script".unicodeScalars)) ?? chars.count
+        let end = find(Array("</\(name)".unicodeScalars)) ?? chars.count
         let content = String(String.UnicodeScalarView(chars[start ..< max(start, end)]))
         position = end
         return content
@@ -173,7 +177,7 @@ struct HTMLScanner {
         return lower
     }
 
-    private static func decodeEntities(_ value: String) -> String {
+    static func decodeEntities(_ value: String) -> String {
         value
             .replacingOccurrences(of: "&quot;", with: "\"")
             .replacingOccurrences(of: "&#39;", with: "'")

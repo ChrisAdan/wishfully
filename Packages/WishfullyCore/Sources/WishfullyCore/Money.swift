@@ -23,3 +23,11 @@ public extension [Money] {
         }
     }
 }
+
+public extension Money {
+    /// Reads a price typed by hand ("68", "$1,299.99", "68,00"); nil for anything else.
+    init?(parsing text: String, currencyCode: String = "USD") {
+        guard let amount = PriceParsing.amount(from: text) else { return nil }
+        self.init(amount: amount, currencyCode: currencyCode)
+    }
+}

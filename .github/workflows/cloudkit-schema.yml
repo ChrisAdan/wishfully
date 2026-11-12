@@ -1,0 +1,49 @@
+# CloudKit schema: imports App/CloudKit/schema.ckdb into the container's Development environment
+# (decision 0017). Production receives it when the maintainer presses "Deploy Schema Changes" in
+# the CloudKit Console, an ask-first step (AGENTS.md, section 5).
+name: cloudkit-schema
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/**"]
+    paths: ["App/CloudKit/schema.ckdb", ".github/workflows/cloudkit-schema.yml"]
+
+# Least privilege: this workflow only reads the repository.
+permissions:
+  contents: read
+
+jobs:
+  import:
+    name: Import into Development
+    runs-on: macos-15
+    timeout-minutes: 15
+    environment: release
+    env:
+      # cktool reads the management token from this variable (cktool man page).
+      CLOUDKIT_MANAGEMENT_TOKEN: ${{ secrets.CLOUDKIT_MANAGEMENT_TOKEN }}
+      TEAM_ID: LAAMNM3P5V
+      CONTAINER_ID: iCloud.com.cambrium.wishfully
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode 26
+        run: |
+          XCODE="$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)"
+          sudo xcode-select -s "$XCODE"
+
+      - name: Validate and import
+        run: |
+          if [ -z "$CLOUDKIT_MANAGEMENT_TOKEN" ]; then
+            echo "CLOUDKIT_MANAGEMENT_TOKEN must be set in the release environment." >&2
+            exit 1
+          fi
+          xcrun cktool validate-schema --team-id "$TEAM_ID" --container-id "$CONTAINER_ID" \
+            --environment development --file App/CloudKit/schema.ckdb
+          xcrun cktool import-schema --team-id "$TEAM_ID" --container-id "$CONTAINER_ID" \
+            --environment development --file App/CloudKit/schema.ckdb
+          xcrun cktool export-schema --team-id "$TEAM_ID" --container-id "$CONTAINER_ID" \
+            --environment development

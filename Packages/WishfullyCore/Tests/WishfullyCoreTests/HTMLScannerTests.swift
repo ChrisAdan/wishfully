@@ -14,11 +14,11 @@ struct HTMLScannerTests {
         #expect(tags.first?[attribute: "checked"] == "")
     }
 
-    @Test("Captures script contents without treating them as tags")
-    func scriptContent() {
-        let html = #"<script type="application/ld+json">{"a": "<b>not a tag</b>"}</script><p>"#
+    @Test("Captures script and title contents without treating them as tags", arguments: ["script", "TITLE"])
+    func rawTextContent(tag: String) {
+        let html = #"<\#(tag) type="application/ld+json">{"a": "<b>not a tag</b>"}</\#(tag)><p>"#
         let tags = HTMLScanner.tags(in: html)
-        #expect(tags.map(\.name) == ["script", "p"])
+        #expect(tags.map(\.name) == [tag.lowercased(), "p"])
         #expect(tags.first?.content == #"{"a": "<b>not a tag</b>"}"#)
     }
 

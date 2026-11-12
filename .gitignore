@@ -1,9 +1,8 @@
 # macOS
 .DS_Store
 
-# Xcode (the project is generated from project.yml by XcodeGen; never commit it)
-*.xcodeproj/
-*.xcworkspace/
+# Xcode (App/Wishfully.xcodeproj is written by hand and committed; decision 0018)
+project.xcworkspace/
 xcuserdata/
 DerivedData/
 *.xcresult
