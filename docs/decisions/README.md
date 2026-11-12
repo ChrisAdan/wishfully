@@ -5,7 +5,7 @@
 | # | Decision | Status |
 |---|---|---|
 | 0001 | [Native iPhone app, built in the cloud](0001-native-iphone-app-built-in-the-cloud.md) | Accepted |
-| 0002 | [Core Data and CloudKit for storage and sync](0002-core-data-and-cloudkit-for-storage-and-sync.md) | Accepted |
+| 0002 | [Core Data and CloudKit for storage and sync](0002-core-data-and-cloudkit-for-storage-and-sync.md) | Superseded by 0017 |
 | 0003 | [Single-writer sharing with private shopper data](0003-single-writer-sharing-with-private-shopper-data.md) | Accepted |
 | 0004 | [App contents limited to Apple frameworks and project code](0004-app-contents-limited-to-apple-frameworks-and-project-code.md) | Accepted |
 | 0005 | [Public repository with agent-written, maintainer-attributed commits](0005-public-repository-with-agent-written-maintainer-attributed-commits.md) | Accepted |
@@ -20,3 +20,5 @@
 | 0014 | [Data safety layers beyond iCloud sync](0014-data-safety-layers.md) | Accepted |
 | 0015 | [Accessibility scope by release](0015-accessibility-scope.md) | Accepted |
 | 0016 | [On-device diagnostics](0016-on-device-diagnostics.md) | Accepted |
+| 0017 | [CloudKit directly for v0 sync](0017-cloudkit-directly-for-v0-sync.md) | Accepted |
+| 0018 | [v0 scope and the TestFlight route](0018-v0-scope-and-the-testflight-route.md) | Accepted |

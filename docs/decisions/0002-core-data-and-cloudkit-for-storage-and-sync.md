@@ -1,7 +1,7 @@
 # 0002. Core Data and CloudKit for storage and sync
 
 - **Date:** 2026-11-06
-- **Status:** Accepted
+- **Status:** Superseded by 0017
 
 ## Maintainer input
 

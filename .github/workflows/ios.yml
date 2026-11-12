@@ -55,8 +55,13 @@ jobs:
           sleep 15
           mkdir -p shots
           xcrun simctl io "$DEVICE" screenshot shots/launch.png
-          # A crash on launch ends the process; this fails the step when it is gone.
-          xcrun simctl spawn "$DEVICE" launchctl list | grep -q com.cambrium.wishfully
+          # The app's log lines, then a crash check: a crash on launch leaves a report.
+          xcrun simctl spawn "$DEVICE" log show --last 2m --style compact \
+            --predicate 'subsystem == "com.cambrium.wishfully"' || true
+          if ls ~/Library/Logs/DiagnosticReports 2>/dev/null | grep -i wishfully; then
+            echo "The app crashed in the simulator." >&2
+            exit 1
+          fi
 
       - name: Upload screenshot and log
         if: always()

@@ -20,7 +20,7 @@ struct SettingsView: View {
                     LabeledContent("Account", value: store.accountDescription)
                     LabeledContent("Last synced") {
                         if let date = store.lastSync {
-                            Text(date, style: .relative) + Text(" ago")
+                            Text("\(date, style: .relative) ago")
                         } else {
                             Text("Not yet")
                         }

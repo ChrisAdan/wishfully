@@ -2,7 +2,7 @@
 
 A cozy iPhone app for gift lists. The recipient adds things from any app's Share sheet. The shopper sees the same list, shops from it and marks items bought, and the surprise stays intact.
 
-**Status:** early development, targeting Christmas 2026. Builds are distributed through TestFlight.
+**Status:** v0, targeting Christmas 2026. Builds reach two phones through TestFlight; [`docs/releases/v0-setup.md`](docs/releases/v0-setup.md) lists the setup steps.
 
 ## How it works
 
@@ -12,7 +12,7 @@ A cozy iPhone app for gift lists. The recipient adds things from any app's Share
 
 ## Architecture
 
-Native Swift 6 and SwiftUI, iOS 18 and later. Domain logic lives in `WishfullyCore`, a pure Swift package tested on Linux. Storage is Core Data on the device, synced and shared through CloudKit using Apple's two-store pattern (private and shared). The shipped app contains Apple frameworks and code from this repository exclusively. Decision records in [`docs/decisions`](docs/decisions) explain each choice.
+Native Swift 6 and SwiftUI, iOS 18 and later. Domain logic lives in `WishfullyCore`, a pure Swift package tested on Linux. Each list is a CloudKit record zone in its owner's private database, shared whole with the shopper; each phone keeps a local snapshot (decision 0017). The shipped app contains Apple frameworks and code from this repository exclusively. Decision records in [`docs/decisions`](docs/decisions) explain each choice.
 
 ## Design principles
 
@@ -28,7 +28,12 @@ Native Swift 6 and SwiftUI, iOS 18 and later. Domain logic lives in `WishfullyCo
 ## Repository layout
 
 ```
-Packages/WishfullyCore/  Domain models, price extraction, note import (pure Swift)
+App/Wishfully/           The iPhone app (SwiftUI)
+App/ShareExtension/      The Share sheet's "Wishfully" entry
+App/Shared/              Code both targets compile: page fetcher, wish form, CloudKit writer
+App/CloudKit/            The CloudKit schema
+Packages/WishfullyCore/  Domain models, page and price extraction, note import, record fields (pure Swift)
+Tools/                   The app icon generator
 docs/decisions/          Decision records
 docs/devblog/            Build log, one post per slice
 .github/                 CI workflows, scripts, Dependabot, code owners
