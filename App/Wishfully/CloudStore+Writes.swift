@@ -157,6 +157,22 @@ extension CloudStore {
 
     // MARK: - Sharing
 
+    /// Deletes a list this person owns: its zone, its wishes and its share. Everyone it was
+    /// shared with loses it on their next sync.
+    func deleteList(_ listID: String) async {
+        guard let state = list(withID: listID), state.isOwner else { return }
+        do {
+            _ = try await container.privateCloudDatabase.modifyRecordZones(saving: [], deleting: [state.target.zoneID])
+            state.wishes.keys.forEach(PhotoStore.remove)
+            lists.removeAll { $0.id == listID }
+            chooseShareTarget()
+            lastError = nil
+        } catch {
+            lastError = Self.describe(error)
+        }
+        persist()
+    }
+
     /// The list's zone-wide share, created on first use. Only the owner calls this.
     func share(for listID: String) async throws -> CKShare {
         guard let state = list(withID: listID), state.isOwner else { throw CKError(.permissionFailure) }

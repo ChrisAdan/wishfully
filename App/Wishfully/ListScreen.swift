@@ -9,6 +9,7 @@ struct ListScreen: View {
     @Environment(\.openURL) private var openURL
     @State private var sheet: ListSheet?
     @State private var shareError: String?
+    @State private var confirmsDelete = false
 
     var body: some View {
         if let state = store.list(withID: listID) {
@@ -46,6 +47,17 @@ struct ListScreen: View {
         .refreshable { await store.refresh() }
         .navigationDestination(for: Wish.ID.self) { WishDetailView(wishID: $0, listID: listID) }
         .toolbar { toolbar(state) }
+        .confirmationDialog(
+            "Delete \(state.title)?",
+            isPresented: $confirmsDelete,
+            titleVisibility: .visible
+        ) {
+            Button("Delete list and its wishes", role: .destructive) {
+                Task { await store.deleteList(listID) }
+            }
+        } message: {
+            Text("It also disappears from everyone it is shared with.")
+        }
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .add: WishEditView(listID: listID, wish: nil)
@@ -99,6 +111,9 @@ struct ListScreen: View {
                     Button("Import from a note", systemImage: "square.and.arrow.down") { sheet = .importNote }
                 }
                 Button("Settings", systemImage: "gearshape") { sheet = .settings }
+                if state.isOwner {
+                    Button("Delete list", systemImage: "trash", role: .destructive) { confirmsDelete = true }
+                }
             }
         }
     }
