@@ -23,11 +23,16 @@ Bought marks stay in the maintainer's private iCloud database. Sabrina's phone h
 - **Signing.** Decision 0018: each TestFlight run makes its own distribution certificate through the App Store Connect API and revokes it at the end.
 - **Checks.** `ios.yml` compiles the app and the extension with warnings as errors, launches the app in the simulator and keeps a screenshot.
 
+## Importing the note
+
+Apple Notes copies a note in two forms: plain text, which keeps the checklist markers, and rich text, which keeps each item's link. The Import screen's paste takes the plain lines and adds the link of the matching rich-text line (`NoteImporter.addingLinks`). A note that arrives with no markers at all is read in markerless mode: a line with an emoji is a section heading, and every other line is a wish. The preview shows the count of wishes and of links before anything is saved.
+
 ## Facts and inferences
 
 | Statement | Confidence |
 |---|---|
-| `WishfullyCore` tests pass on Linux: 45 tests in 10 suites | 100% |
+| `WishfullyCore` tests pass on Linux: 47 tests in 10 suites | 100% |
+| Notes on iOS places both a plain-text and a rich-text copy of a note on the pasteboard | 80% |
 | SwiftFormat, SwiftLint, jscpd, docs style, forbidden APIs and gitleaks pass locally | 100% |
 | The app and extension compile and launch in the simulator | Reported by the `ios` workflow on each push |
 | The signing script creates usable profiles once the identifiers in `docs/releases/v0-setup.md` exist | 75% |

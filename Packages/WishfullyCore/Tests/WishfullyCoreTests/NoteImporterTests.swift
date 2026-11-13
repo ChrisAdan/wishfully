@@ -98,4 +98,36 @@ struct NoteImporterTests {
     func emptyNote() {
         #expect(NoteImporter.parse("") == NoteImport(title: nil, wishes: []))
     }
+
+    @Test("A checklist copied without its checkboxes reads emoji lines as headings and the rest as wishes")
+    func markerlessNote() {
+        let parsed = NoteImporter.parse("""
+        ⭐️ holiday wishes ⭐️
+
+        Outdoors 🌲
+        \u{FFFC}Trail mug https://shop.example/mug
+        Wool beanie™
+
+        Reading 📚
+        Poetry anthology
+        """)
+        #expect(parsed.title == "⭐️ holiday wishes ⭐️")
+        #expect(parsed.wishes.map(\.title) == ["Trail mug", "Wool beanie™", "Poetry anthology"])
+        #expect(parsed.wishes.map(\.category) == ["Outdoors", "Outdoors", "Reading"])
+        #expect(parsed.wishes.first?.url?.absoluteString == "https://shop.example/mug")
+    }
+
+    @Test("Links from the rich-text copy join the matching plain-text lines", arguments: [
+        ("- [ ] Trail mug", "Trail mug", "- [ ] Trail mug https://shop.example/1"),
+        ("- [ ]  Wool  BEANIE ", "wool beanie", "- [ ]  Wool  BEANIE  https://shop.example/1"),
+        ("- [ ] Hiking socks m", "Hiking socks", "- [ ] Hiking socks m https://shop.example/1"),
+        ("- [ ] Pen", "Pencil case", "- [ ] Pen"),
+        ("Outdoors 🌲", "Trail mug", "Outdoors 🌲"),
+        ("- [ ] Mug https://other.example/m", "Mug", "- [ ] Mug https://other.example/m"),
+    ])
+    func addsLinks(plain: String, linkedText: String, expected: String) throws {
+        let url = try #require(URL(string: "https://shop.example/1"))
+        let merged = NoteImporter.addingLinks([LinkedLine(text: linkedText, url: url)], to: plain)
+        #expect(merged == expected)
+    }
 }
