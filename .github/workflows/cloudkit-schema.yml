@@ -20,7 +20,8 @@ jobs:
     timeout-minutes: 15
     environment: release
     env:
-      # cktool reads the management token from this variable (cktool man page).
+      # cktool reads the management token from this variable (cktool man page). The token comes from
+      # the Settings section of the user account in CloudKit Console.
       CLOUDKIT_MANAGEMENT_TOKEN: ${{ secrets.CLOUDKIT_MANAGEMENT_TOKEN }}
       TEAM_ID: LAAMNM3P5V
       CONTAINER_ID: iCloud.com.cambrium.wishfully

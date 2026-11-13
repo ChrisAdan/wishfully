@@ -24,7 +24,7 @@ Settings, Environments, New environment: `release`. Optionally add the maintaine
 | `ASC_KEY_ID` | The same App Store Connect API key Sonder uses (Admin role) |
 | `ASC_ISSUER_ID` | Its issuer ID |
 | `ASC_KEY_P8` | The full text of its `.p8` file |
-| `CLOUDKIT_MANAGEMENT_TOKEN` | A management token from the CloudKit Console (container `iCloud.com.cambrium.wishfully`, Settings, Tokens & Keys, new management token) |
+| `CLOUDKIT_MANAGEMENT_TOKEN` | A management token from the CloudKit Console, under the Settings section of the user account (top right). The container's Tokens & Keys page offers API tokens and server-to-server keys, which are different token types |
 
 ## 4. The CloudKit schema
 
