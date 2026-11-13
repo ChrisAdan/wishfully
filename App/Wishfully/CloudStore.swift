@@ -233,10 +233,11 @@ final class CloudStore {
         try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data)
     }
 
-    /// The Share extension adds to the first list this person owns, or else the first shared
-    /// list they may write to.
+    /// The Share extension adds to the first list made for this person that they may write to,
+    /// or else the first list they may write to.
     func chooseShareTarget() {
-        let target = lists.first(where: \.isOwner) ?? lists.first(where: \.canWrite)
+        let writable = lists.filter(\.canWrite)
+        let target = writable.first { !$0.isShopper } ?? writable.first
         ListTarget.saveShareTarget(target?.target)
     }
 

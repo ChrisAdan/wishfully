@@ -1,7 +1,7 @@
 # 0003. Single-writer sharing with private shopper data
 
 - **Date:** 2026-11-06
-- **Status:** Accepted
+- **Status:** Amended by 0019
 
 ## Maintainer input
 

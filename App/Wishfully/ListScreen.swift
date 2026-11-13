@@ -21,13 +21,13 @@ struct ListScreen: View {
     private func list(_ state: ListState) -> some View {
         let shopping = ShoppingList(
             wishes: Array(state.wishes.values),
-            overlays: state.isOwner ? [] : Array(store.overlays.values)
+            overlays: state.isShopper ? Array(store.overlays.values) : []
         )
         return List {
             if let error = store.lastError ?? shareError {
                 Text(error).font(.footnote).foregroundStyle(.red)
             }
-            if state.isOwner {
+            if !state.isShopper {
                 rows(shopping.items, state: state)
             } else {
                 ShoppingSummary(list: shopping)
@@ -39,7 +39,7 @@ struct ListScreen: View {
         }
         .overlay {
             if state.wishes.isEmpty {
-                EmptyListView(isOwner: state.isOwner)
+                EmptyListView(isRecipient: !state.isShopper)
             }
         }
         .navigationTitle(state.title)
@@ -58,7 +58,7 @@ struct ListScreen: View {
     private func rows(_ items: [ShoppingItem], state: ListState) -> some View {
         ForEach(items) { item in
             NavigationLink(value: item.id) {
-                WishRow(item: item, showsPurchase: !state.isOwner) {
+                WishRow(item: item, showsPurchase: state.isShopper) {
                     Task { await store.setPurchased(!item.isPurchased, for: item.id) }
                 }
             }
@@ -145,10 +145,10 @@ struct ShoppingSummary: View {
 }
 
 struct EmptyListView: View {
-    let isOwner: Bool
+    let isRecipient: Bool
 
     var body: some View {
-        if isOwner {
+        if isRecipient {
             ContentUnavailableView {
                 Label("Nothing here yet", systemImage: "gift")
             } description: {
@@ -158,7 +158,7 @@ struct EmptyListView: View {
             ContentUnavailableView(
                 "Nothing on the list yet",
                 systemImage: "gift",
-                description: Text("Wishes appear here as they are added.")
+                description: Text("Wishes appear here as they are added. Tap + or ⋯, Import from a note, to add some.")
             )
         }
     }

@@ -6,7 +6,7 @@
 |---|---|---|
 | 0001 | [Native iPhone app, built in the cloud](0001-native-iphone-app-built-in-the-cloud.md) | Accepted |
 | 0002 | [Core Data and CloudKit for storage and sync](0002-core-data-and-cloudkit-for-storage-and-sync.md) | Superseded by 0017 |
-| 0003 | [Single-writer sharing with private shopper data](0003-single-writer-sharing-with-private-shopper-data.md) | Accepted |
+| 0003 | [Single-writer sharing with private shopper data](0003-single-writer-sharing-with-private-shopper-data.md) | Amended by 0019 |
 | 0004 | [App contents limited to Apple frameworks and project code](0004-app-contents-limited-to-apple-frameworks-and-project-code.md) | Accepted |
 | 0005 | [Public repository with agent-written, maintainer-attributed commits](0005-public-repository-with-agent-written-maintainer-attributed-commits.md) | Accepted |
 | 0006 | [MIT license](0006-mit-license.md) | Accepted |
@@ -22,3 +22,4 @@
 | 0016 | [On-device diagnostics](0016-on-device-diagnostics.md) | Accepted |
 | 0017 | [CloudKit directly for v0 sync](0017-cloudkit-directly-for-v0-sync.md) | Accepted |
 | 0018 | [v0 scope and the TestFlight route](0018-v0-scope-and-the-testflight-route.md) | Accepted |
+| 0019 | [The shopper may own the list](0019-the-shopper-may-own-the-list.md) | Accepted |

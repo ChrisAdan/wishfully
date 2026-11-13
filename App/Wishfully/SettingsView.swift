@@ -45,7 +45,7 @@ struct SettingsView: View {
                     ForEach(store.lists) { state in
                         LabeledContent(
                             state.title,
-                            value: state.isOwner ? (state.isShared ? "Shared" : "Mine") : "Shopping"
+                            value: state.isShopper ? "Shopping" : (state.isShared ? "Mine, shared" : "Mine")
                         )
                     }
                 }

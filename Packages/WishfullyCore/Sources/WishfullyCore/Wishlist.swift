@@ -9,6 +9,9 @@ public struct Wishlist: Identifiable, Hashable, Codable, Sendable {
     public var title: String
     public var occasion: String?
     public var eventDate: Date?
+    /// The person the list is for, when the owner made it on their behalf and shops from it.
+    /// Nil when the owner keeps the list for themselves.
+    public var recipient: String?
     public let createdAt: Date
 
     public init(
@@ -16,12 +19,14 @@ public struct Wishlist: Identifiable, Hashable, Codable, Sendable {
         title: String,
         occasion: String? = nil,
         eventDate: Date? = nil,
+        recipient: String? = nil,
         createdAt: Date = Date()
     ) {
         self.id = id
         self.title = title
         self.occasion = occasion
         self.eventDate = eventDate
+        self.recipient = recipient
         self.createdAt = createdAt
     }
 }

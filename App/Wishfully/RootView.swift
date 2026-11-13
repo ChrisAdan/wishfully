@@ -47,8 +47,8 @@ struct HomeView: View {
 
     var body: some View {
         List {
-            section("My lists", lists: store.lists.filter(\.isOwner))
-            section("Shopping for", lists: store.lists.filter { !$0.isOwner })
+            section("My lists", lists: store.lists.filter { !$0.isShopper })
+            section("Shopping for", lists: store.lists.filter(\.isShopper))
         }
         .navigationTitle("Wishfully")
         .refreshable { await store.refresh() }
@@ -73,11 +73,21 @@ struct HomeView: View {
     }
 }
 
-/// Shown before any list exists on this phone.
+/// Shown before any list exists on this phone. A list is for this person, who shares it with
+/// whoever shops for them, or for someone else, which this person shops from and shares with them.
 struct WelcomeView: View {
     @Environment(CloudStore.self) private var store
-    @State private var title = "My wishlist"
+    @State private var isForSomeoneElse = false
+    @State private var recipient = ""
     @State private var isCreating = false
+
+    private var trimmedRecipient: String {
+        recipient.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var title: String {
+        isForSomeoneElse ? "\(trimmedRecipient)'s wishlist" : "My wishlist"
+    }
 
     var body: some View {
         Form {
@@ -87,31 +97,39 @@ struct WelcomeView: View {
                         .font(.largeTitle)
                         .foregroundStyle(Palette.accent)
                         .accessibilityHidden(true)
-                    Text("Make a list, then share it with the person shopping for you.")
-                    Text("Add things from any app with the Share button: tap Wishfully in the row of apps.")
+                    Text("Make a wishlist, then share it with a link in Messages.")
+                    Text("Whoever the list is for adds things from any app with the Share button.")
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 8)
             }
-            Section("Your list") {
-                TextField("Name", text: $title)
-                Button {
-                    isCreating = true
-                    Task {
-                        await store.createList(title: title.trimmingCharacters(in: .whitespacesAndNewlines))
-                        isCreating = false
-                    }
-                } label: {
+            Section {
+                Picker("Who is this list for?", selection: $isForSomeoneElse) {
+                    Text("Me").tag(false)
+                    Text("Someone else").tag(true)
+                }
+                .pickerStyle(.segmented)
+                if isForSomeoneElse {
+                    TextField("Their name", text: $recipient)
+                        .textContentType(.givenName)
+                }
+                Button(action: create) {
                     if isCreating {
                         ProgressView()
                     } else {
-                        Text("Create my list")
+                        Text(isForSomeoneElse ? "Create their list" : "Create my list")
                     }
                 }
-                .disabled(isCreating || title.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled(isCreating || (isForSomeoneElse && trimmedRecipient.isEmpty))
+            } footer: {
+                if isForSomeoneElse {
+                    Text(
+                        "You shop from this list; your bought marks stay in your iCloud. They see the list without them."
+                    )
+                }
             }
             Section {
-                Text("Shopping for someone? Open the link they sent you in Messages, and their list appears here.")
+                Text("Someone sent you a list? Open their link in Messages, and it appears here.")
                     .foregroundStyle(.secondary)
             }
             if let error = store.lastError {
@@ -120,5 +138,13 @@ struct WelcomeView: View {
         }
         .navigationTitle("Wishfully")
         .refreshable { await store.refresh() }
+    }
+
+    private func create() {
+        isCreating = true
+        Task {
+            await store.createList(title: title, recipient: isForSomeoneElse ? trimmedRecipient : nil)
+            isCreating = false
+        }
     }
 }

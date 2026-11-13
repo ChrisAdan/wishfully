@@ -58,6 +58,7 @@ public enum RecordSchema {
         public static let wishID = "wishID"
         public static let status = "status"
         public static let boughtAt = "boughtAt"
+        public static let recipient = "recipient"
     }
 
     /// Each wishlist lives in its own record zone, so one zone-wide share covers the list.
@@ -85,7 +86,11 @@ private let posix = Locale(identifier: "en_US_POSIX")
 
 public extension Wishlist {
     var recordFields: [String: FieldValue] {
-        [Field.title: .string(title), Field.createdAt: .date(createdAt)]
+        [
+            Field.title: .string(title),
+            Field.createdAt: .date(createdAt),
+            Field.recipient: recipient.map(FieldValue.string) ?? .empty,
+        ]
     }
 
     init?(recordName: String, fields: [String: FieldValue]) {
@@ -93,6 +98,7 @@ public extension Wishlist {
         self.init(
             id: ID(uuid),
             title: fields[Field.title]?.string ?? "",
+            recipient: fields[Field.recipient]?.string,
             createdAt: fields[Field.createdAt]?.date ?? Date(timeIntervalSince1970: 0)
         )
     }

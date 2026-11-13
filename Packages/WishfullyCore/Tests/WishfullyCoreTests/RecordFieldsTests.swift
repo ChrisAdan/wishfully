@@ -35,8 +35,13 @@ struct RecordFieldsTests {
 
     @Test("Wishlists and overlays survive the trip through record fields")
     func listAndOverlayRoundTrip() {
-        let list = Wishlist(title: "Christmas", createdAt: Fixtures.start)
-        #expect(Wishlist(recordName: list.id.description, fields: list.recordFields) == list)
+        for list in [
+            Wishlist(title: "Christmas", createdAt: Fixtures.start),
+            Wishlist(title: "Christmas", recipient: "Alex", createdAt: Fixtures.start),
+        ] {
+            let fields = list.recordFields.filter { $0.value != .empty }
+            #expect(Wishlist(recordName: list.id.description, fields: fields) == list)
+        }
         let overlay = ShopperOverlay(wishID: Self.full.id, status: .bought, boughtAt: Fixtures.start)
         #expect(ShopperOverlay(fields: overlay.recordFields) == overlay)
     }

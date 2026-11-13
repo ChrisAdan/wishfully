@@ -17,9 +17,15 @@ struct ListState: Codable, Identifiable, Sendable {
         target.zoneName + "/" + target.ownerName
     }
 
-    /// The owner sees the list as written; everyone it is shared with shops from it.
+    /// True when this person created the list; only the owner manages sharing.
     var isOwner: Bool {
         target.scope == .owned
+    }
+
+    /// True when this person shops from the list: the owner of a list made for someone else, or
+    /// anyone a self-kept list is shared with. The person the list is for never sees bought marks.
+    var isShopper: Bool {
+        isOwner == (list.recipient != nil)
     }
 
     var title: String {

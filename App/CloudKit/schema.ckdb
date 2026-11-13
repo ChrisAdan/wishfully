@@ -20,6 +20,7 @@ DEFINE SCHEMA
         "___modifiedBy" REFERENCE,
         "___recordID"   REFERENCE QUERYABLE,
         createdAt       TIMESTAMP,
+        recipient       STRING,
         title           STRING,
         GRANT WRITE TO "_creator",
         GRANT CREATE TO "_icloud",

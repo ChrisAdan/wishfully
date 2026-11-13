@@ -5,8 +5,8 @@ import WishfullyCore
 /// Writes: lists, wishes, bought marks, the Share extension's inbox and sharing.
 extension CloudStore {
     /// Creates a list owned by this person, in a zone of its own.
-    func createList(title: String) async {
-        let list = Wishlist(title: title)
+    func createList(title: String, recipient: String? = nil) async {
+        let list = Wishlist(title: title, recipient: recipient)
         let zoneID = CKRecordZone.ID(zoneName: RecordSchema.zoneName(for: list.id), ownerName: CKCurrentUserDefaultName)
         let target = ListTarget(scope: .owned, zoneName: zoneID.zoneName, ownerName: zoneID.ownerName, title: title)
         let record = CKRecord(

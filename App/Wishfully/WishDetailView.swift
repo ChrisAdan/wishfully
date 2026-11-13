@@ -29,7 +29,7 @@ struct WishDetailView: View {
                     .listRowBackground(Color.clear)
             }
             WishFacts(wish: wish)
-            if !state.isOwner {
+            if state.isShopper {
                 Section {
                     Toggle("Bought", isOn: Binding(
                         get: { bought },

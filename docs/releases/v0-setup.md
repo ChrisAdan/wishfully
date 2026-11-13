@@ -40,8 +40,8 @@ Run the **testflight** workflow (Actions tab, Run workflow, with a purpose), or 
 ## 6. The phones
 
 1. App Store Connect, TestFlight, Internal Testing: add the maintainer and Sabrina to a group and add the build. Internal testers are App Store Connect users on the team, so Sabrina first gets an App Store Connect invitation (Users and Access, role Customer Support or Developer). Both install TestFlight from the App Store and accept the invitation.
-2. **Sabrina** opens Wishfully, creates her list, then taps **More, Share list** and sends the link to the maintainer in Messages. The default permission lets the maintainer add items.
-3. **The maintainer** taps the link; Wishfully opens with Sabrina's list under "Shopping for". The maintainer imports the existing note (**More, Import from a note**) or adds items with **+**.
+2. **The maintainer** opens Wishfully, chooses **Someone else**, types "Sabrina" and taps **Create their list**. Then **More, Import from a note** brings in the existing note (copy the note in Notes, then **Paste from a note**), and **More, Share list** sends the link to Sabrina in Messages.
+3. **Sabrina** taps the link; Wishfully opens with her list, without bought marks.
 4. **Sabrina** adds from Safari or a store app: Share, then Wishfully in the row of apps. If Wishfully is missing from the row, scroll to the end, tap **More** and switch it on.
 
 ## Checks on the phones
